@@ -18,8 +18,8 @@ def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
  
 
-def create_index_html():
-    model_name = "Greetings"
+def create_task(model_name):
+    """Renders a task based on the java asynctask template"""
 
     item1={"access_mod": "public", "type": "String", "name": "first_name"}
     item2={"access_mod": "public", "type": "String", "name": "middle_name"}
@@ -32,15 +32,15 @@ def create_index_html():
     representation_model = model_name
     
     context = {
-	'package': package_name,
-	'task_class_name': task_class_name,
+        'package': package_name,
+        'task_class_name': task_class_name,
         'representationModel': representation_model,
         'restUri': 'http://somerest.org/api/'
     }
     #
     with open(fname, 'w') as f:
-        html = render_template('task.java', context)
-        f.write(html)
+        rendered_code = render_template('task.java', context)
+        f.write(rendered_code)
  
 
 def create_model(model_name, fields):
@@ -50,14 +50,14 @@ def create_model(model_name, fields):
     representation_model = model_name
 
     context = {
-	'package': package_name,
+        'package': package_name,
         'representationModel': representation_model,
         'fields': fields
     }
     #
     with open(fname, 'w') as f:
-        html = render_template("model.java", context)
-        f.write(html)
+        rendered_code = render_template("model.java", context)
+        f.write(rendered_code)
  
  
 def main():
@@ -66,7 +66,9 @@ def main():
         os.mkdir(output_path)
     except Exception:
         pass
-    create_index_html()
+
+    # Hardcoded mode
+    create_task("Greetings")
  
 ########################################
  
