@@ -24,6 +24,7 @@ public class {{ task_class_name }} extends AsyncTask<Void, Void, {{ representati
 
         @Override
         protected void onPostExecute({{ representationModel }} {{ representationModel|lower }}) {
+            Log.e("onPostExecute", {{ representationModel|lower }}.toString());
         }
 
     }
