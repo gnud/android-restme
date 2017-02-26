@@ -3,7 +3,7 @@ package {{ package }};
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class {{ representationModel }} {
+public class {{ representationModel|capitalize }} {
 
   {% for field in fields -%}
   private {{ field.type }} {{ field.name }};

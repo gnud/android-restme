@@ -1,4 +1,4 @@
-package com/damjan_dimitrioski/resttest;
+package com.damjan_dimitrioski.resttest.rest;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,14 +6,16 @@ import android.util.Log;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-public class GreetingsCallTask extends AsyncTask<Void, Void, greetings[]> {
+import java.util.Arrays;
+
+public class GreetingsCallTask extends AsyncTask<Void, Void, Greetings[]> {
         @Override
-        protected greetings[] doInBackground(Void... params) {
+        protected Greetings[] doInBackground(Void... params) {
             try {	
-		final String url = "http://192.168.0.100:3004/greetings";
+		        final String url = "http://192.168.0.100:3004/greetings";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                greetings[] greetings = restTemplate.getForObject(url, greetings[].class);
+                Greetings[] greetings = restTemplate.getForObject(url, Greetings[].class);
                 return greetings;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
@@ -23,8 +25,10 @@ public class GreetingsCallTask extends AsyncTask<Void, Void, greetings[]> {
         }
 
         @Override
-        protected void onPostExecute(greetings[] greetings) {
-            Log.e("onPostExecute", greetings.toString());
+        protected void onPostExecute(Greetings[] greetings) {
+            Log.e("onPostExecute", "");
+            for(Greetings greetings1 : Arrays.asList(greetings))
+                Log.e("item:", greetings1.toString());
         }
 
     }

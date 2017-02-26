@@ -1,88 +1,102 @@
 #!/usr/bin/env python
- 
+
 import os
 import json
 from jinja2 import Environment, FileSystemLoader
 import sys
 
-PATH = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_ENVIRONMENT = Environment(
-    autoescape=False,
-    loader=FileSystemLoader(os.path.join(PATH, 'templates')),
-    trim_blocks=False)
 
+class RestApp(object):
+    """
+    Application to build and deploy an Android rest API package.
+    """
 
-def render_template(template_filename, context):
-    return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
- 
+    def __init__(self):
+        # Setup Jinja 2 templates engine
+        app_root = os.path.dirname(os.path.abspath(__file__))
+        self.template_environment = Environment(
+                autoescape=False,
+                loader=FileSystemLoader(os.path.join(app_root, 'templates')),
+                trim_blocks=False)
 
-def create_task(deploy_path, model_name, model_items, rest_uri, package_name):
-    """Renders a task based on the java asynctask template"""
+        # Defining fields
+        self.app_name = ''
+        self.rest_uri = ''
+        self.package_name = ''
+        self.model_name = ''
+        self.deploy_path = ''
+        self.model_items = ''
 
-    create_model(deploy_path, model_name, package_name, model_items)
+    def render_template(self, template_filename, context):
+        """ JINJA2 helper method
+        :param template_filename:
+        :param context:
+        :return: str The rendered template
+        """
+        return self.template_environment.get_template(template_filename).render(context)
 
-    task_class_name = "%sCallTask" % model_name.title()
-    fname = os.path.join(deploy_path, '%s.java' % task_class_name )
+    def create_task(self):
+        """Renders a task based on the java AsyncTask template"""
 
-    representation_model = model_name
-    
-    context = {
-        'package': package_name,
-        'task_class_name': task_class_name,
-        'representationModel': representation_model,
-        'restUri': rest_uri
-    }
+        self.create_model()
+        static_name = 'CallTask'
+        template_name = 'task.java'
 
-    with open(fname, 'w') as f:
-        rendered_code = render_template('task.java', context)
-        f.write(rendered_code)
- 
+        task_class_name = '%s%s' % (self.model_name.title(), static_name)
+        fname = os.path.join(self.deploy_path, '%s.java' % task_class_name)
 
-def create_model(deploy_path, model_name, package_name, fields):
-    fname = os.path.join(deploy_path, '%s.java' % model_name )
+        context = {
+            'package': self.package_name,
+            'task_class_name': task_class_name,
+            'representationModel': self.model_name,
+            'restUri': self.rest_uri
+        }
 
-    representation_model = model_name
+        with open(fname, 'w') as f:
+            rendered_code = self.render_template(template_name, context)
+            f.write(rendered_code)
 
-    context = {
-        'package': package_name,
-        'representationModel': representation_model,
-        'fields': fields
-    }
+    def create_model(self):
+        template_name = 'model.java'
+        fname = os.path.join(self.deploy_path, '%s.java' % self.model_name.title())
 
-    with open(fname, 'w') as f:
-        rendered_code = render_template("model.java", context)
-        f.write(rendered_code)
- 
+        context = {
+            'package': self.package_name,
+            'representationModel': self.model_name,
+            'fields': self.model_items
+        }
 
-def process_model(project_path, model_path):
-    with open(model_path) as data_file:
-        try:
-            model_name = os.path.splitext(os.path.basename(model_path))[0].title()
-        except Exception:
-            print('Processing of %s failed.' % model_name)
+        with open(fname, 'w') as f:
+            rendered_code = self.render_template(template_name, context)
+            f.write(rendered_code)
 
-        data = json.load(data_file)
+    def process_project(self, project_path, full_project_path):
+        """
+        Parses the restproject.json as JSON and the builds the REST API
+        :param str project_path: Working path (CWD) of the project
+        :param str full_project_path: The full path of the project JSON file
+        """
+        with open(full_project_path) as data_file:
+            data = json.load(data_file)
 
-        # extract data
-        app_name = data['app_name']
-        rest_uri = data['server']
-        package_name = data['package_name']
-        model_name = data['model_name']
-        deploy_path = os.path.join(project_path, data['deploy_path'], package_name.replace('.', os.path.sep), app_name)
-        model_items = data['fields']
+            # extract data
+            self.app_name = data['app_name']
+            self.rest_uri = data['server']
+            self.package_name = data['package_name']
+            self.model_name = data['model_name']
+            self.deploy_path = os.path.join(project_path, data['deploy_path'],
+                                            self.package_name.replace('.', os.path.sep))
+            self.model_items = data['fields']
 
-        # ensure the output directory is ready
-        try:
-            os.mkdir(deploy_path)
-        except OSError:
-            print('deploy_path exists "%s".' % deploy_path)
-            print('continuing anyways ...')
-            #return # TODO: make a question or sys argument that ask for overwrite
-        except Exception as e:
-            pass
+            # ensure the output directory is ready
+            try:
+                os.mkdir(self.deploy_path)
+            except OSError:
+                print('Deploy path exists "%s".' % self.deploy_path)
+                print('continuing anyways ...')
 
-        # Hardcoded mode
-        create_task(deploy_path, model_name, model_items, rest_uri, package_name)
+            # Hardcoded mode
+            self.create_task()
 
 
 def main():
@@ -93,10 +107,10 @@ def main():
         return
 
     full_project_path = os.path.join(project_path, 'restproject.json')
+    RestApp().process_project(project_path, full_project_path)
 
-    process_model(project_path, full_project_path)
- 
+
 ########################################
- 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main()

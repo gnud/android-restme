@@ -1,7 +1,7 @@
 {
   "app_name": "rest",
   "server": "http://192.168.0.100:3004/",
-  "package_name": "com/damjan_dimitrioski/resttest",
+  "package_name": "com.damjan_dimitrioski.resttest.rest",
   "deploy_path": "app/src/main/java/",
   "model_name": "greetings",
   "fields": [
