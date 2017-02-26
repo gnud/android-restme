@@ -18,13 +18,10 @@ def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
  
 
-def create_task(model_name):
+def create_task(model_name, model_items):
     """Renders a task based on the java asynctask template"""
 
-    item1={"access_mod": "public", "type": "String", "name": "first_name"}
-    item2={"access_mod": "public", "type": "String", "name": "middle_name"}
-    item3={"access_mod": "public", "type": "String", "name": "last_name"}
-    create_model(model_name, [item1, item2, item3])
+    create_model(model_name, model_items)
 
     task_class_name = "%sCallTask" % model_name.title()
     fname = "%s%s.java" % (output_path, task_class_name)
@@ -61,14 +58,19 @@ def create_model(model_name, fields):
  
  
 def main():
-    # ensure the output directoty is ready
+    # ensure the output directory is ready
     try:
         os.mkdir(output_path)
     except Exception:
         pass
 
+    item1 = {"access_mod": "public", "type": "String", "name": "first_name"}
+    item2 = {"access_mod": "public", "type": "String", "name": "middle_name"}
+    item3 = {"access_mod": "public", "type": "String", "name": "last_name"}
+    model_items = [item1, item2, item3]
+
     # Hardcoded mode
-    create_task("Greetings")
+    create_task("Greetings", model_items)
  
 ########################################
  
