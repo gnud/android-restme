@@ -42,3 +42,4 @@ captures/
 .directory
 *-swp
 output/**
+!output/.gitkeep
