@@ -1,16 +1,17 @@
 #!/usr/bin/env python
  
 import os
+import json
 from jinja2 import Environment, FileSystemLoader
- 
+
 PATH = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
     loader=FileSystemLoader(os.path.join(PATH, 'templates')),
     trim_blocks=False)
 
- 
-package_name = 'com.myrest.rest' 
+
+package_name = 'com.myrest.rest'
 output_path = 'output/rest/'
 
 
@@ -56,7 +57,20 @@ def create_model(model_name, fields):
         rendered_code = render_template("model.java", context)
         f.write(rendered_code)
  
- 
+
+def process_model(model_path):
+    with open(model_path) as data_file:
+        try:
+            model_name = os.path.splitext(os.path.basename(model_path))[0].title()
+        except Exception:
+            print('Processing of %s failed.' % model_name)
+
+        model_items = json.load(data_file)
+
+        # Hardcoded mode
+        create_task(model_name, model_items)
+
+
 def main():
     # ensure the output directory is ready
     try:
@@ -64,13 +78,7 @@ def main():
     except Exception:
         pass
 
-    item1 = {"access_mod": "public", "type": "String", "name": "first_name"}
-    item2 = {"access_mod": "public", "type": "String", "name": "middle_name"}
-    item3 = {"access_mod": "public", "type": "String", "name": "last_name"}
-    model_items = [item1, item2, item3]
-
-    # Hardcoded mode
-    create_task("Greetings", model_items)
+    process_model("data/greetings.json")
  
 ########################################
  

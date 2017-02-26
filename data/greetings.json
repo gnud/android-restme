@@ -1,0 +1,5 @@
+[
+  {"access_mod": "public", "type": "String", "name": "first_name"},
+  {"access_mod": "public", "type": "String", "name": "middle_name"},
+  {"access_mod": "public", "type": "String", "name": "last_name"}
+]
