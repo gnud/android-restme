@@ -1,0 +1,21 @@
+{
+  "app_name": "rest",
+  "server": "http://192.168.0.100:3004/",
+  "package_name": "com/damjan_dimitrioski/resttest",
+  "deploy_path": "app/src/main/java/",
+  "model_name": "greetings",
+  "fields": [
+    {
+      "type": "String",
+      "name": "first_name"
+    },
+    {
+      "type": "String",
+      "name": "middle_name"
+    },
+    {
+      "type": "String",
+      "name": "last_name"
+    }
+  ]
+}
