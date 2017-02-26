@@ -32,11 +32,11 @@ Outside only (like for Android) in a LAN:
 # Reference
 
 ## Jinja2
-http://jinja.pocoo.org/docs/2.9/templates/
-http://jinja.pocoo.org/docs/2.9/templates/#builtin-filters
-https://pythonadventures.wordpress.com/2014/02/25/jinja2-example-for-generating-a-local-file-using-a-template/
+- http://jinja.pocoo.org/docs/2.9/templates/
+- http://jinja.pocoo.org/docs/2.9/templates/#builtin-filters
+- https://pythonadventures.wordpress.com/2014/02/25/jinja2-example-for-generating-a-local-file-using-a-template/
 
 ## Rest template
-https://spring.io/guides/gs/consuming-rest-android/
-http://docs.spring.io/spring-android/docs/2.0.0.M3/reference/html/
-http://docs.spring.io/spring-android/docs/2.0.0.M3/reference/html/rest-template.html#d5e154
+- https://spring.io/guides/gs/consuming-rest-android/
+- http://docs.spring.io/spring-android/docs/2.0.0.M3/reference/html/
+- http://docs.spring.io/spring-android/docs/2.0.0.M3/reference/html/rest-template.html#d5e154
