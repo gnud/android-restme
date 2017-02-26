@@ -11,8 +11,11 @@ open any file that imports jinja2, a notification will showup asking you to inst
 
 # Running
 Right click on the app.py then Run 'app'/Debug with PyCharm or
+In the "Scripts parameters" paste the full path of the working directory.
 
-```python app.py``` Ensure you have loaded the virtualenv
+```python app.py MyWorkingDir``` Ensure you have loaded the virtualenv
+where MyWorkingDir is the full path of the Android project location i.e:
+../samples/RestTest
 
 # Demo REST server
 in the rest_demo directory
