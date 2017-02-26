@@ -7,11 +7,11 @@ public class {{ representationModel }} {
   {% endfor -%}
 
   {% for field in fields %}
-  {{ field.access_mod }} String get{{ field.name|capitalize }}() {
+  public String get{{ field.name|capitalize }}() {
       return this.{{ field.name }};
   }
 
-  {{ field.access_mod }} void set{{ field.name|capitalize }}({{ field.type }} {{ field.name }}) {
+  public void set{{ field.name|capitalize }}({{ field.type }} {{ field.name }}) {
       this.{{ field.name }} = {{ field.name }};
   }
   {% endfor %}      
