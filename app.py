@@ -12,10 +12,12 @@ TEMPLATE_ENVIRONMENT = Environment(
  
 package_name = 'com.myrest.rest' 
 output_path = 'output/rest/'
- 
+
+
 def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
  
+
 def create_index_html():
     model_name = "Greetings"
 
@@ -40,6 +42,7 @@ def create_index_html():
         html = render_template('task.java', context)
         f.write(html)
  
+
 def create_model(model_name, fields):
     fname = "%s%s.java" % (output_path, model_name)
     tname = "%s.java" % model_name
@@ -58,6 +61,11 @@ def create_model(model_name, fields):
  
  
 def main():
+    # ensure the output directoty is ready
+    try:
+        os.mkdir(output_path)
+    except Exception:
+        pass
     create_index_html()
  
 ########################################
