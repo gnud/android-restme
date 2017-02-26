@@ -19,7 +19,7 @@ def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
  
 
-def create_task(model_name, model_items):
+def create_task(model_name, model_items, rest_uri):
     """Renders a task based on the java asynctask template"""
 
     create_model(model_name, model_items)
@@ -33,7 +33,7 @@ def create_task(model_name, model_items):
         'package': package_name,
         'task_class_name': task_class_name,
         'representationModel': representation_model,
-        'restUri': 'http://somerest.org/api/'
+        'restUri': rest_uri
     }
     #
     with open(fname, 'w') as f:
@@ -65,10 +65,12 @@ def process_model(model_path):
         except Exception:
             print('Processing of %s failed.' % model_name)
 
-        model_items = json.load(data_file)
+        data = json.load(data_file)
+        rest_uri = data['server']
+        model_items = data['fields']
 
         # Hardcoded mode
-        create_task(model_name, model_items)
+        create_task(model_name, model_items, rest_uri)
 
 
 def main():

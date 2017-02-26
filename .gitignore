@@ -43,3 +43,5 @@ captures/
 *-swp
 output/**
 !output/.gitkeep
+
+**/node_modules/**
